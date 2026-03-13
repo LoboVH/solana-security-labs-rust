@@ -4,7 +4,7 @@ An attacker can substitute another user's state account and modify it.
 
 ## Vulnerability Type
 
-Account Substitution / Broken Account Relationship Validation
+### Account Substitution / Broken Account Relationship Validation
 
 In Solana programs, all accounts are supplied by the transaction caller.  
 If the program does not validate the relationship between accounts and their authority, an attacker can substitute another account and manipulate its data.
@@ -86,7 +86,7 @@ Programs must validate:
 - PDA derivations
 - token mint associations
 
-## TO run this LAB:
+## To run this LAB:
 
 Run the local validator first,
 ```
