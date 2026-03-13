@@ -1,4 +1,4 @@
-# Solana Security Lab: Account Substitution Attack
+# Solana Security Lab: [Account Substitution Attack](https://github.com/LoboVH/solana-security-labs-rust/tree/main/programs/account-substitution-lab)
 This lab demonstrates a common Solana vulnerability where a program fails to validate the relationship between a signer and a state account.  
 An attacker can substitute another user's state account and modify it.
 
