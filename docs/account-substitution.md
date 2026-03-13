@@ -2,6 +2,8 @@
 This lab demonstrates a common Solana vulnerability where a program fails to validate the relationship between a signer and a state account.  
 An attacker can substitute another user's state account and modify it.
 
+The vulnerable instruction accepts an arbitrary Profile account and an arbitrary signer, but fails to verify that the signer is the profile authority. An attacker can substitute a victim’s profile and redirect the recovery_wallet to attacker-controlled infrastructure, enabling unauthorized recovery control hijack.
+
 ## Vulnerability Type
 
 ### Account Substitution / Broken Account Relationship Validation
