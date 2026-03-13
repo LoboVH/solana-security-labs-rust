@@ -18,6 +18,7 @@ Each lab contains:
 ## Running the tests
 
 solana-test-validator
+
 anchor test --skip-local-validator
 
 anchor test --skip-local-validator --skip-build --skip-deploy   (Once build is done and no fresh changes inside program)
