@@ -11,7 +11,7 @@ Each lab contains:
 ## Labs
 
 1. [Account Substitution Attack](https://github.com/LoboVH/solana-security-labs-rust/blob/main/docs/account-substitution.md)
-2. Missing Signer Validation
+2. [Missing Signer Validation](https://github.com/LoboVH/solana-security-labs-rust/blob/main/docs/missing-signer-admin.md)
 3. PDA Authority Confusion
 4. Unchecked CPI Target
 
