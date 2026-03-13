@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-declare_id!("9NZqZZggJ4iYsffucSKRzMwpBNXfcC7yKpnL9CsxFkjy");
+declare_id!("HDi2L6zCnfqzH1PqNY1qEXBY61eQk2A3TJrrBFjtydii");
 
 #[program]
 pub mod account_substitution_lab {

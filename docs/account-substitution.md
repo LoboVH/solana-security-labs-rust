@@ -45,7 +45,7 @@ Account relationship validation is one of the most common attack surfaces in Sol
 
  ## Proof of Exploit
 
-The Rust integration test demonstrates that an attacker can update the victim's profile using the vulnerable instruction.
+The [Rust integration test](https://github.com/LoboVH/solana-security-labs-rust/blob/main/tests/src/account-substitution_attack.rs) demonstrates that an attacker can update the victim's profile using the vulnerable instruction.
 
 Assertion:
 ``` assert_eq!(after_attack.authority, victim.pubkey());
