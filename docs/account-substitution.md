@@ -18,7 +18,7 @@ Account relationship validation is one of the most common attack surfaces in Sol
 
 ```
     #[derive(Accounts)]
-    pub struct SetStatusVulnerable<'info> {
+    pub struct SetRecoveryWalletVulnerable<'info> {
         pub authority: Signer<'info>,
 
         #[account(mut)]
@@ -46,8 +46,9 @@ Account relationship validation is one of the most common attack surfaces in Sol
 The Rust integration test demonstrates that an attacker can update the victim's profile using the vulnerable instruction.
 
 Assertion:
-``` assert_eq!(profile_account.authority, victim.pubkey());
-    assert_eq!(profile_account.status, "hacked-by-attacker");
+``` assert_eq!(after_attack.authority, victim.pubkey());
+    assert_eq!(after_attack.recovery_wallet, attacker.pubkey());
+    assert_eq!(after_attack.status, "victim's status");
 ```
 
 Test Restult:
