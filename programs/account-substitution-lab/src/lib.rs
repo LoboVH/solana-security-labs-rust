@@ -7,23 +7,24 @@ pub mod account_substitution_lab {
 
     use super::*;
 
-    pub fn initialize_profile(ctx: Context<InitializeProfile>, status: String) -> Result<()> {
+    pub fn initialize_profile(ctx: Context<InitializeProfile>, recovery_wallet: Pubkey, status: String) -> Result<()> {
         let profile = &mut ctx.accounts.profile;
         profile.authority = ctx.accounts.authority.key();
+        profile.recovery_wallet = recovery_wallet;
         profile.status = status;
         Ok(())
     }
 
 
-    pub fn set_status_vulnerable(ctx: Context<SetStatusVulnerable>, status: String) -> Result<()> {
+    pub fn set_recovery_wallet_vulnerable(ctx: Context<SetRecoveryWalletVulnerable>, new_recovery_wallet: Pubkey) -> Result<()> {
         let profile = &mut ctx.accounts.profile;
-        profile.status = status;
+        profile.recovery_wallet = new_recovery_wallet;
         Ok(())
     }
 
-    pub fn set_status_secure(ctx: Context<SetStatusSecure>, status: String) -> Result<()> {
+    pub fn set_recovery_wallet_secure(ctx: Context<SetRecoveryWalletSecure>, new_recovery_wallet: Pubkey) -> Result<()> {
         let profile = &mut ctx.accounts.profile;
-        profile.status = status; 
+        profile.recovery_wallet = new_recovery_wallet;
         Ok(())
     }
 }
@@ -38,7 +39,7 @@ pub struct InitializeProfile<'info> {
 }
 
 #[derive(Accounts)]
-pub struct SetStatusVulnerable<'info> {
+pub struct SetRecoveryWalletVulnerable<'info> {
     // Vulnerable because it does not check that the authority is the signer of the transaction
     #[account(mut)]
     pub profile: Account<'info, Profile>,
@@ -47,7 +48,7 @@ pub struct SetStatusVulnerable<'info> {
 }
 
 #[derive(Accounts)]
-pub struct SetStatusSecure<'info> {
+pub struct SetRecoveryWalletSecure<'info> {
     // Secure because it checks that the authority is the signer of the transaction
     #[account(mut, has_one = authority)]
     pub profile: Account<'info, Profile>,
@@ -60,6 +61,7 @@ pub struct SetStatusSecure<'info> {
 #[derive(InitSpace)]
 pub struct Profile {
     pub authority: Pubkey,
+    pub recovery_wallet: Pubkey,
     #[max_len(64)]
     pub status: String,
 }
