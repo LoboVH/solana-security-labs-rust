@@ -8,4 +8,3 @@ rust-version = "1.89.0"
 [dependencies]
 anchor-client = "0.32.1"
 account-substitution-lab = { version = "0.1.0", path = "../programs/account-substitution-lab" }
-solana-security-labs = { version = "0.1.0", path = "../programs/solana-security-labs" }

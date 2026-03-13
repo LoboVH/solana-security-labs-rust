@@ -1,7 +1,7 @@
 use std::{str::FromStr};
 
 use account_substitution_lab::{
-    accounts::{InitializeProfile, SetStatusSecure, SetStatusVulnerable},
+    accounts::{InitializeProfile, SetRecoveryWalletVulnerable, SetRecoveryWalletSecure},
     instruction,
     Profile,
 };
@@ -55,6 +55,7 @@ fn account_substitution_attack_works_on_vulnerable_instruction() {
     let victim = Keypair::new();
     let profile = Keypair::new();
     let attacker = Keypair::new();
+    let victim_recovery_wallet = Keypair::new();
 
     // Fund the victim and the attacker
 
@@ -73,22 +74,26 @@ fn account_substitution_attack_works_on_vulnerable_instruction() {
                 system_program: anchor_client::solana_sdk::system_program::ID,
             })
             .args(instruction::InitializeProfile {
+                recovery_wallet: victim_recovery_wallet.pubkey(),
                 status: "victim's status".to_string(),
             })
             .signer(&profile)
             .signer(&victim)
             .send();
 
+    let before_attack: Profile = program.account(profile.pubkey()).unwrap();
     assert!(init_sig.is_ok(), "Failed to initialize profile: {:?}", init_sig.err());
+    assert_eq!(before_attack.authority, victim.pubkey());
+    assert_eq!(before_attack.recovery_wallet, victim_recovery_wallet.pubkey());
 
     let attack_sig = program
             .request()
-            .accounts(SetStatusVulnerable {
+            .accounts(SetRecoveryWalletVulnerable {
                 profile: profile.pubkey(),
                 authority: attacker.pubkey(),
             })
-            .args(instruction::SetStatusVulnerable {
-                status: "hacked-by-attacker".to_string(),
+            .args(instruction::SetRecoveryWalletVulnerable {
+                new_recovery_wallet: attacker.pubkey(),
             })
             .signer(&attacker)
             .send();
@@ -98,9 +103,10 @@ fn account_substitution_attack_works_on_vulnerable_instruction() {
             "attacker should succeed against vulnerable instruction"
         );
 
-        let profile_account: Profile = program.account(profile.pubkey()).unwrap();
-        assert_eq!(profile_account.authority, victim.pubkey());
-        assert_eq!(profile_account.status, "hacked-by-attacker".to_string());
+        let after_attack: Profile = program.account(profile.pubkey()).unwrap();
+        assert_eq!(after_attack.authority, victim.pubkey());
+        assert_eq!(after_attack.recovery_wallet, attacker.pubkey());
+        assert_eq!(after_attack.status, "victim's status");
 
 }
 
@@ -113,6 +119,7 @@ fn account_substitution_attack_fails_on_secure_instruction() {
     let victim = Keypair::new();
     let profile = Keypair::new();
     let attacker = Keypair::new();
+    let victim_recovery_wallet = Keypair::new();
 
     // Fund the victim and the attacker
 
@@ -132,6 +139,7 @@ fn account_substitution_attack_fails_on_secure_instruction() {
                 system_program: anchor_client::solana_sdk::system_program::ID,
             })
             .args(instruction::InitializeProfile {
+                recovery_wallet: victim_recovery_wallet.pubkey(),
                 status: "victim's status".to_string()
             })
             .signer(&profile)
@@ -141,22 +149,23 @@ fn account_substitution_attack_fails_on_secure_instruction() {
     assert!(init_sig.is_ok(), "Failed to initialize profile: {:?}", init_sig.err());
 
     let attack_sig = program.request()
-            .accounts(SetStatusSecure {
+            .accounts(SetRecoveryWalletSecure {
                 profile: profile.pubkey(),
                 authority: attacker.pubkey(),
             })
-            .args(instruction::SetStatusSecure {
-                status: "hacked-by-attacker".to_string(),
+            .args(instruction::SetRecoveryWalletSecure {
+                new_recovery_wallet: attacker.pubkey(),
             })
             .signer(&attacker)
             .send();
 
     assert!(
-        attack_sig.is_err(),
+        attack_sig.is_err(),  
         "attacker should fail against secure instruction"
     );
 
-    let profile_account: Profile = program.account(profile.pubkey()).unwrap();
+    let profile_account: Profile = program.account(profile.pubkey()).unwrap();  
+    assert_eq!(profile_account.recovery_wallet, victim_recovery_wallet.pubkey());
     assert_eq!(profile_account.authority, victim.pubkey());
     assert_eq!(profile_account.status, "victim's status".to_string());
 }
