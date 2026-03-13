@@ -7,6 +7,7 @@ skip-lint = false
 
 [programs.localnet]
 account-substitution-lab = "AcDwGNQy8mUqi9XnokKCbRZCFyGHNpDGHe9HBC83bMam"
+missing-signer-admin-lab = "5vP8bkxboAf7SUJHC769wKgo78r2643wu55qzhkAxJuu"
 solana_security_labs = "5q6Btf2WNmbogzVRVEaAqkJUc2Y7VwGnjRDrwDSctBNR"
 
 [registry]
