@@ -1,4 +1,4 @@
-# Solana Security Lab: Missing Signer Admin Attack
+# Solana Security Lab: [Missing Signer Admin Attack](https://github.com/LoboVH/solana-security-labs-rust/tree/main/programs/missing-signer-admin-lab)
 This lab demonstrates a missing signer validation vulnerability in Solana programs where privileged admin actions fail to verify that the admin actually signed the transaction.
 
 Without proper signer enforcement, an attacker can impersonate the admin account in instruction inputs and perform privileged state changes.
