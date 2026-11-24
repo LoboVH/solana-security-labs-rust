@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 use account_substitution_lab::{
     accounts::{InitializeProfile, SetRecoveryWalletSecure, SetRecoveryWalletVulnerable},
     instruction, Profile,
@@ -12,11 +10,12 @@ use anchor_client::{
         pubkey::Pubkey,
         signature::{read_keypair_file, Keypair},
         signer::Signer,
-        system_instruction,
         transaction::Transaction,
     },
     Client, Cluster,
 };
+
+use solana_system_interface::instruction as system_instruction;
 
 fn fund_account(
     program: &anchor_client::Program<std::sync::Arc<anchor_client::solana_sdk::signature::Keypair>>,
